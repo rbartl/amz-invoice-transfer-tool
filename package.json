@@ -1,0 +1,33 @@
+{
+  "name": "amz-invoice-transfer-tool",
+  "version": "1.0.0",
+  "description": "Download invoices from Amazon Business and sync to Paperless-ngx",
+  "main": "src/cli.ts",
+  "scripts": {
+    "download": "tsx src/cli.ts download",
+    "status": "tsx src/cli.ts status",
+    "typecheck": "tsc --noEmit"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rbartl/amz-invoice-transfer-tool.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/rbartl/amz-invoice-transfer-tool/issues"
+  },
+  "homepage": "https://github.com/rbartl/amz-invoice-transfer-tool#readme",
+  "dependencies": {
+    "commander": "^14.0.3",
+    "dotenv": "^17.2.4",
+    "playwright": "^1.58.2",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3"
+  },
+  "devDependencies": {
+    "@types/node": "^25.2.2"
+  }
+}

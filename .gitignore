@@ -1,0 +1,8 @@
+node_modules/
+dist/
+.env
+invoices/
+state.json
+*~
+.claude
+.idea

@@ -84,6 +84,7 @@ program
     const context = await chromium.launchPersistentContext(userDataDir, {
       headless: false,
       locale: "de-DE",
+      executablePath: process.env.CHROMIUM_PATH || undefined,
     });
 
     const page = context.pages()[0] || (await context.newPage());

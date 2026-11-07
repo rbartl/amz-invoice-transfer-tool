@@ -111,22 +111,21 @@ export async function getOrCreateDocumentType(config: Config, name: string): Pro
  * Returns the document ID if found, null otherwise.
  */
 export async function findDocumentByOrderId(config: Config, orderId: string): Promise<number | null> {
-  // First: search for order ID in title with wildcard
-  const titleData = await apiGet(
-    config,
-    `/api/documents/?query=${encodeURIComponent(`title:*${orderId}*`)}`
-  );
-  if (titleData.count > 0 && titleData.results && titleData.results.length > 0) {
-    return titleData.results[0].id;
-  }
+  // Paperless full-text search tokenizes "303-0755476-5623501" into several
+  // terms and matches documents containing any of them. So we search for a
+  // phrase and then verify client-side that the full order ID really occurs
+  // in the title or content of the hit.
+  const contains = (doc: any) =>
+    String(doc.title ?? "").includes(orderId) || String(doc.content ?? "").includes(orderId);
 
-  // Fallback: search in full document content
-  const contentData = await apiGet(
-    config,
-    `/api/documents/?query=${encodeURIComponent(orderId)}`
-  );
-  if (contentData.count > 0 && contentData.results && contentData.results.length > 0) {
-    return contentData.results[0].id;
+  const queries = [`title:*${orderId}*`, `"${orderId}"`];
+  for (const query of queries) {
+    const data = await apiGet(
+      config,
+      `/api/documents/?page_size=25&query=${encodeURIComponent(query)}`
+    );
+    const hit = (data.results ?? []).find(contains);
+    if (hit) return hit.id;
   }
 
   return null;
